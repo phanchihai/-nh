@@ -8,11 +8,26 @@ async function loadGallery() {
     const res = await fetch("/gallery");
     const data = await res.json();
     gallery.innerHTML = "";
+
     data.reverse().forEach(img => {
+      // Tạo khung gallery-item
+      const item = document.createElement("div");
+      item.className = "gallery-item";
+
+      // Ảnh
       const el = document.createElement("img");
-      el.src = img.secure_url;   // ✅ dùng secure_url
-      el.width = 200;
-      gallery.appendChild(el);
+      el.src = img.secure_url;
+      el.alt = "Kỷ niệm 💖";
+
+      // Caption (nếu muốn có chữ dưới ảnh)
+      const caption = document.createElement("div");
+      caption.className = "caption";
+      caption.textContent = "Kỷ niệm 💕";
+
+      // Gắn vào gallery
+      item.appendChild(el);
+      item.appendChild(caption);
+      gallery.appendChild(item);
     });
   } catch (err) {
     gallery.innerHTML = "<p>🚫 Lỗi tải ảnh!</p>";
@@ -45,4 +60,5 @@ form.addEventListener("submit", async (e) => {
   }
 });
 
+// Gọi khi load trang
 loadGallery();

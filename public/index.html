@@ -2,19 +2,130 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Bộ Sưu Tập Ảnh</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Huỳnh Chí Thiện</title>
 </head>
 <body>
-  <h1>Bộ Sưu Tập Ảnh</h1>
+<!-- HEADER -->
+<header class="main-header" 
+        style="background-color: #87CEFA; padding: 20px 0; text-align: center;">
+  <div class="logo" 
+       style="font-size: 40px; font-weight: bold; color: white;">
+    Huỳnh Chí Thiện
+  </div>
+</header>
 
-  <form id="upload-form">
-    <input type="file" id="imageInput" name="file" required />
-    <button type="submit">Tải ảnh lên</button>
+
+<!-- UPLOAD -->
+<section class="upload-section" style="text-align: center; margin: 30px 0;">
+  <form id="upload-form" style="display: inline-block;">
+
+    <!-- Label thay thế input file -->
+    <label for="imageInput" 
+           style="display: inline-block;
+                  background-color: #fff;
+                  border: 2px dashed #87CEFA;
+                  color: #87CEFA;
+                  font-weight: bold;
+                  padding: 12px 25px;
+                  border-radius: 30px;
+                  cursor: pointer;
+                  transition: all 0.3s ease;
+                  margin-right: 10px;">
+      📂 Chọn ảnh
+    </label>
+
+    <!-- Input file thật (ẩn đi) -->
+    <input type="file" id="imageInput" name="file" accept="image/*" required
+           style="display: none;">
+
+    <!-- Nút upload -->
+    <button type="submit"
+            style="background-color: #87CEFA; 
+                   border: none; 
+                   color: white; 
+                   font-weight: bold; 
+                   padding: 12px 25px; 
+                   border-radius: 30px; 
+                   cursor: pointer; 
+                   transition: all 0.3s ease;">
+      💗 Tải ảnh lên 💗
+    </button>
   </form>
+</section>
 
-  <h2>Gallery</h2>
-  <div id="gallery"></div>
+
+<!-- GALLERY -->
+<main class="gallery-section" style="text-align: center; margin: 30px 0;">
+  <h2 style="margin-bottom: 20px;">🌸 Bộ sưu tập của chúng ta 🌸</h2>
+
+  <div id="gallery" class="gallery-grid"
+       style="display: grid;
+              grid-template-columns: repeat(4, 1fr);
+              gap: 15px;
+              padding: 10px;">
+  </div>
+</main>
+
+<style>
+  /* Khung ảnh */
+  .gallery-grid img {
+    width: 100%;
+    height: 200px;            /* chiều cao cố định, các ảnh đều nhau */
+    object-fit: contain;      /* giữ nguyên toàn bộ ảnh, không crop */
+    background-color: #fff;   /* nền trắng để lấp khoảng trống */
+    border-radius: 12px;
+    border: 2px solid #87CEFA;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    padding: 5px;             /* tạo khung viền bên trong */
+    transition: transform 0.3s;
+  }
+
+  /* Hover hiệu ứng */
+  .gallery-grid img:hover {
+    transform: scale(1.05);
+  }
+
+  /* Responsive */
+  @media (max-width: 992px) {
+    .gallery-grid {
+      grid-template-columns: repeat(2, 1fr); /* tablet: 2 cột */
+    }
+  }
+  @media (max-width: 600px) {
+    .gallery-grid {
+      grid-template-columns: repeat(1, 1fr); /* mobile: 1 cột */
+    }
+  }
+</style>
+
+
+
+<!-- FOOTER -->
+<footer style="background-color: #87CEFA; 
+               padding: 20px 0; 
+               text-align: center; 
+               margin-top: 30px;">
+  <p style="font-size: 22px; 
+            font-weight: bold; 
+            color: white; 
+            margin: 0;">
+    💘 Với tất cả tình yêu, gửi đến Huỳnh Chí Thiện 💘
+  </p>
+</footer>
+
 
   <script src="app.js"></script>
+  <script>
+    // Hiệu ứng tim bay 💕
+    document.addEventListener("click", function(e) {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.style.left = e.clientX + "px";
+      heart.style.top = e.clientY + "px";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 1500);
+    });
+  </script>
 </body>
 </html>

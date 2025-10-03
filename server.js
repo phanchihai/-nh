@@ -6,7 +6,10 @@ import cors from "cors";
 import path from "path";
 
 // Load biến môi trường từ .env
-dotenv.config();
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config();
+}
+
 
 const app = express();
 const port = process.env.PORT || 4000;
