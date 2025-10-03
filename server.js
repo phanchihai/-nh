@@ -37,25 +37,32 @@ app.post("/upload", upload.single("file"), async (req, res) => {
     const file = req.file;
     if (!file) return res.status(400).json({ message: "Chưa chọn file" });
 
-    // Promise wrapper cho upload_stream (Render bắt buộc phải có)
+    console.log("Uploading file:", file.originalname, "size:", file.size);
+
     const uploadPromise = new Promise((resolve, reject) => {
       const stream = cloudinary.uploader.upload_stream(
         { folder: "trangcanhan" },
         (error, result) => {
-          if (error) reject(error);
-          else resolve(result);
+          if (error) {
+            console.error("Cloudinary error:", error);
+            reject(error);
+          } else {
+            resolve(result);
+          }
         }
       );
       stream.end(file.buffer);
     });
 
     const result = await uploadPromise;
+    console.log("Upload success:", result.secure_url);
     res.json({ message: "✅ Upload thành công!", url: result.secure_url });
   } catch (err) {
     console.error("Upload error:", err);
     res.status(500).json({ message: "❌ Upload thất bại", error: err.message });
   }
 });
+
 
 
 // Route lấy danh sách ảnh
