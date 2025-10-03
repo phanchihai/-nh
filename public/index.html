@@ -7,53 +7,14 @@
 <body>
   <h1>Bộ Sưu Tập Ảnh</h1>
 
-  <form id="uploadForm">
-    <input type="file" id="fileInput" name="file" required />
+  <form id="upload-form">
+    <input type="file" id="imageInput" name="file" required />
     <button type="submit">Tải ảnh lên</button>
   </form>
 
   <h2>Gallery</h2>
   <div id="gallery"></div>
 
-  <script>
-    const uploadForm = document.getElementById("uploadForm");
-    const fileInput = document.getElementById("fileInput");
-    const galleryDiv = document.getElementById("gallery");
-
-    // Upload ảnh
-    uploadForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const file = fileInput.files[0];
-      if (!file) return alert("Chọn file trước!");
-
-      const formData = new FormData();
-      formData.append("file", file);
-
-      const res = await fetch("/upload", {
-        method: "POST",
-        body: formData
-      });
-
-      const data = await res.json();
-      alert(data.message);
-      loadGallery();
-    });
-
-    // Load gallery
-    async function loadGallery() {
-      const res = await fetch("/gallery");
-      const urls = await res.json();
-
-      galleryDiv.innerHTML = "";
-      urls.forEach(url => {
-        const img = document.createElement("img");
-        img.src = url;
-        img.width = 200;
-        galleryDiv.appendChild(img);
-      });
-    }
-
-    loadGallery();
-  </script>
+  <script src="app.js"></script>
 </body>
 </html>

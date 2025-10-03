@@ -9,7 +9,8 @@ import path from "path";
 dotenv.config();
 
 const app = express();
-const port = 4000;
+const port = process.env.PORT || 4000;
+
 
 // Cấu hình Cloudinary
 cloudinary.config({
@@ -36,36 +37,49 @@ app.post("/upload", upload.single("file"), async (req, res) => {
     const file = req.file;
     if (!file) return res.status(400).json({ message: "Chưa chọn file" });
 
-    // Upload trực tiếp từ buffer
-    const result = await cloudinary.uploader.upload_stream(
-      { folder: "trangcanhan" }, // folder trong Cloudinary
-      (error, result) => {
-        if (error) return res.status(500).json({ message: "Upload thất bại", error });
-        res.json({ message: "Upload thành công", url: result.secure_url });
-      }
-    );
+    // Promise wrapper cho upload_stream (Render bắt buộc phải có)
+    const uploadPromise = new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        { folder: "trangcanhan" },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
+      stream.end(file.buffer);
+    });
 
-    result.end(file.buffer);
+    const result = await uploadPromise;
+    res.json({ message: "✅ Upload thành công!", url: result.secure_url });
   } catch (err) {
-    res.status(500).json({ message: "Lỗi server", error: err });
+    console.error("Upload error:", err);
+    res.status(500).json({ message: "❌ Upload thất bại", error: err.message });
   }
 });
+
 
 // Route lấy danh sách ảnh
 app.get("/gallery", async (req, res) => {
   try {
     const result = await cloudinary.api.resources({
       type: "upload",
-      prefix: "trangcanhan/", // lấy đúng folder
+      prefix: "trangcanhan/",
       max_results: 20,
     });
 
-    const urls = result.resources.map((img) => img.secure_url);
-    res.json(urls);
+    // Trả về mảng object (đúng format app.js đang cần)
+    const data = result.resources.map((img) => ({
+      secure_url: img.secure_url,
+      public_id: img.public_id,
+    }));
+
+    res.json(data);
   } catch (err) {
-    res.status(500).json({ message: "Không lấy được ảnh", error: err });
+    console.error(err);
+    res.status(500).json({ message: "Không lấy được ảnh", error: err.message });
   }
 });
+
 
 // Start server
 app.listen(port, () => {
