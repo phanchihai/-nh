@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: nh
+    env: node
+    plan: free
+    buildCommand: "npm install"
+    startCommand: "npm start"
+    envVars:
+      - key: CLOUDINARY_CLOUD_NAME
+        value: drpxiflag
+      - key: CLOUDINARY_API_KEY
+        value: 183656246551788
+      - key: CLOUDINARY_API_SECRET
+        value: ZLWjzuc6HqEUZQ-4amVlTuSQZq8
